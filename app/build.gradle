@@ -1,0 +1,28 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.m19.hdrtoggle'
+    compileSdk 33
+
+    defaultConfig {
+        applicationId "com.m19.hdrtoggle"
+        minSdk 21
+        targetSdk 28 // 目标 API 设为 28 避免高版本沙盒限制局域网明文 Socket
+        versionCode 1
+        versionName "1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.debug // 直接使用 debug 签名方便开箱即装
+        }
+    }
+}
+
+dependencies {
+    // 纯 Java 实现的轻量 ADB 客户端
+    implementation 'io.github.cgutman:adblib:1.1.1'
+}
