@@ -1,1 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="#1E1E1E">
 
+    <TextView
+        android:id="@+id/tv_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="当前状态：等待操作"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        android:layout_marginBottom="40dp" />
+
+    <Button
+        android:id="@+id/btn_enable_sdr"
+        android:layout_width="320dp"
+        android:layout_height="70dp"
+        android:focusable="true"
+        android:text="开启 HDR to SDR（防泛白）"
+        android:textSize="18sp"
+        android:layout_marginBottom="16dp" />
+
+    <Button
+        android:id="@+id/btn_restore_hdr"
+        android:layout_width="320dp"
+        android:layout_height="70dp"
+        android:focusable="true"
+        android:text="复原默认 HDR 模式"
+        android:textSize="18sp"
+        android:layout_marginBottom="16dp" />
+
+    <!-- 新增重启按钮 -->
+    <Button
+        android:id="@+id/btn_reboot"
+        android:layout_width="320dp"
+        android:layout_height="70dp"
+        android:focusable="true"
+        android:text="重启天猫魔盒"
+        android:textColor="#FF6B6B"
+        android:textSize="18sp" />
+</LinearLayout>
