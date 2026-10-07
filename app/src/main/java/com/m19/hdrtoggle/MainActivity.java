@@ -15,7 +15,6 @@ import com.cgutman.adblib.AdbStream;
 
 import java.io.File;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 import java.util.concurrent.Executors;
 
 public class MainActivity extends Activity {
@@ -31,7 +30,9 @@ public class MainActivity extends Activity {
         tvStatus = findViewById(R.id.tv_status);
         Button btnEnableSdr = findViewById(R.id.btn_enable_sdr);
         Button btnRestoreHdr = findViewById(R.id.btn_restore_hdr);
+        Button btnReboot = findViewById(R.id.btn_reboot);
 
+        // 开启 HDR to SDR
         btnEnableSdr.setOnClickListener(v -> executeShellCommand(
             "setprop persist.sys.hdr.policy 2\n" +
             "setprop persist.sys.hdr.mode 0\n" +
@@ -41,11 +42,18 @@ public class MainActivity extends Activity {
             "已强制开启 HDR to SDR"
         ));
 
+        // 恢复默认 HDR 模式
         btnRestoreHdr.setOnClickListener(v -> executeShellCommand(
             "setprop persist.sys.hdr.policy 0\n" +
             "setprop persist.sys.hdr.mode 1\n" +
             "settings put global hdr_mode 1\n",
             "已恢复默认设置"
+        ));
+
+        // 新增：重启魔盒
+        btnReboot.setOnClickListener(v -> executeShellCommand(
+            "reboot\n",
+            "正在重启系统..."
         ));
     }
 
@@ -53,10 +61,8 @@ public class MainActivity extends Activity {
         tvStatus.setText("正在执行命令...");
         Executors.newSingleThreadExecutor().execute(() -> {
             try {
-                // 连接本机的 5555 端口
                 Socket socket = new Socket("127.0.0.1", 5555);
-                
-                // 本地快速生成/复用 ADB 证书
+
                 File privKey = new File(getFilesDir(), "priv.key");
                 File pubKey = new File(getFilesDir(), "pub.key");
                 AdbCrypto crypto;
@@ -71,15 +77,21 @@ public class MainActivity extends Activity {
                 AdbConnection adb = AdbConnection.create(socket, crypto);
                 adb.connect();
 
-                // 执行 Shell 命令并断开
+                // 执行 Shell 命令
                 AdbStream stream = adb.open("shell:" + cmd);
-                stream.close();
-                adb.close();
-
+                
                 mainHandler.post(() -> {
                     tvStatus.setText("当前状态：" + successMsg);
                     Toast.makeText(MainActivity.this, successMsg, Toast.LENGTH_SHORT).show();
                 });
+
+                // 对于 reboot 命令，系统会立即开始关机流程，ADB 连接可能会非正常断开，这是正常现象
+                try {
+                    stream.close();
+                    adb.close();
+                } catch (Exception ignored) {
+                }
+
             } catch (Exception e) {
                 mainHandler.post(() -> {
                     tvStatus.setText("执行失败: 请确保网络ADB 5555已开启");
