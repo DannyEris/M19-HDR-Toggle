@@ -66,7 +66,7 @@ public class MainActivity extends Activity {
                 File privKey = new File(getFilesDir(), "priv.key");
                 File pubKey = new File(getFilesDir(), "pub.key");
                 AdbCrypto crypto;
-                AdbBase64 base64 = android.util.Base64::encodeToString;
+                AdbBase64 base64 = data -> android.util.Base64.encodeToString(data, android.util.Base64.NO_WRAP);
                 if (!privKey.exists()) {
                     crypto = AdbCrypto.generateAdbKeyPair(base64);
                     crypto.saveAdbKeyPair(privKey, pubKey);
