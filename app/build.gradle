@@ -23,6 +23,6 @@ android {
 }
 
 dependencies {
-    // 纯 Java 实现的轻量 ADB 客户端
-    implementation 'io.github.cgutman:adblib:1.1.1'
+    // 将 io.github 更改为 com.github，版本使用 master-SNAPSHOT 确保能从 JitPack 直接拉取
+    implementation 'com.github.cgutman:adblib:master-SNAPSHOT'
 }
