@@ -1,7 +1,7 @@
 name: Build TV APK
 
 on:
-  workflow_dispatch: # 仅通过网页端手动点击按钮触发
+  workflow_dispatch: # 纯手动触发
 
 jobs:
   build:
@@ -20,7 +20,7 @@ jobs:
     - name: 云端自动安装 Gradle
       uses: gradle/actions/setup-gradle@v3
       with:
-        gradle-version: '8.2.2'
+        gradle-version: '8.2.1'
 
     - name: 编译 Release APK
       run: gradle assembleRelease
