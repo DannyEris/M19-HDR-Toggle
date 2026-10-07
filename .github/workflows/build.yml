@@ -1,9 +1,7 @@
 name: Build TV APK
 
 on:
-  push:
-    branches: [ "main" ]
-  workflow_dispatch:
+  workflow_dispatch: # 仅通过网页端手动点击按钮触发
 
 jobs:
   build:
@@ -18,13 +16,14 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
-        cache: gradle
 
-    - name: 赋予 Gradle 执行权限
-      run: chmod +x gradlew
+    - name: 云端自动安装 Gradle
+      uses: gradle/actions/setup-gradle@v3
+      with:
+        gradle-version: '8.2.2'
 
     - name: 编译 Release APK
-      run: ./gradlew assembleRelease
+      run: gradle assembleRelease
 
     - name: 上传构建产物
       uses: actions/upload-artifact@v4
